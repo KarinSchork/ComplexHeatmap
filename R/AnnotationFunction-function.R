@@ -1371,6 +1371,8 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 			value_origin = value
 			value = data_scale[2] - value + data_scale[1]
 			baseline = data_scale[2] - baseline + data_scale[1]
+		} else {
+			value_origin = value
 		}
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
@@ -1380,7 +1382,7 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 			grid.rect(x = x_coor, y = n - seq_along(index) + 1, width = abs(width), height = 1*bar_width, default.units = "native", gp = subset_gp(gp, index))
 			if(add_numbers) {
 				if(axis_param$direction == "normal") {
-					txt = value[index]
+					txt = value_origin[index]
 					if(!is.null(attr(value, "labels_format"))) {
 						txt = attr(value, "labels_format")(value[index])
 					}
@@ -1449,6 +1451,8 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 			value_origin = value
 			value = data_scale[2] - value + data_scale[1]
 			baseline = data_scale[2] - baseline + data_scale[1]
+		} else {
+			value_origin = value
 		}
 
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
@@ -1457,15 +1461,23 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 			y_coor = height/2+baseline
 			grid.rect(y = y_coor, x = seq_along(index), height = abs(height), width = 1*bar_width, default.units = "native", gp = subset_gp(gp, index))
 			if(add_numbers) {
-				txt = value[index]
+				txt = value_origin[index]
 				if(!is.null(attr(value, "labels_format"))) {
 					txt = attr(value, "labels_format")(value[index])
 				}
 				numbers_rot = numbers_rot %% 360
-				if(numbers_rot == 0) {
-					grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("bottom"))
+				if(axis_param$direction == "normal") {
+					if(numbers_rot == 0) {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("bottom"))
+					} else {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("left"), rot = numbers_rot)
+					}
 				} else {
-					grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("left"), rot = numbers_rot)
+					if(numbers_rot == 0) {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") - numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("top"))
+					} else {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") - numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("right"), rot = numbers_rot)
+					}
 				}
 			}
 		} else {
