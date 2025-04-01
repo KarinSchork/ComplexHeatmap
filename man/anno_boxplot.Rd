@@ -9,7 +9,7 @@ Boxplot Annotation
 \usage{
 anno_boxplot(x, which = c("column", "row"), border = TRUE,
     gp = gpar(fill = "#CCCCCC"), ylim = NULL, extend = 0.05, outline = TRUE, box_width = 0.6,
-    add_points = FALSE, pch = 16, size = unit(4, "pt"), pt_gp = gpar(), axis = TRUE,
+    add_points = FALSE, pch = 16, size = unit(4, "pt"), pt_gp = gpar(), axis = TRUE, background = FALSE,
     axis_param = default_axis_param(which), width = NULL, height = NULL, ...)
 }
 \arguments{
@@ -28,6 +28,7 @@ anno_boxplot(x, which = c("column", "row"), border = TRUE,
   \item{pt_gp}{Graphics parameters for points.}
   \item{axis}{Whether to add axis?}
   \item{axis_param}{parameters for controlling axis. See \code{\link{default_axis_param}} for all possible settings and default parameters.}
+  \item{background}{Logical, whether to draw background grid lines?}
   \item{width}{Width of the annotation. The value should be an absolute unit. Width is not allowed to be set for column annotation.}
   \item{height}{Height of the annotation. The value should be an absolute unit. Height is not allowed to be set for row annotation.}
   \item{...}{Other arguments.}
