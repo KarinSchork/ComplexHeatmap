@@ -744,6 +744,7 @@ construct_axis_grob = function(axis_param, which, data_scale, format = NULL) {
 # -extend The extension to both side of ``ylim``. The value is a percent value corresponding to ``ylim[2] - ylim[1]``.
 # -axis Whether to add axis?
 # -axis_param parameters for controlling axis. See `default_axis_param` for all possible settings and default parameters.
+# -background Logical, whether to draw background grid lines?
 # -width Width of the annotation. The value should be an absolute unit. Width is not allowed to be set for column annotation.
 # -height Height of the annotation. The value should be an absolute unit. Height is not allowed to be set for row annotation.
 # -... Other arguments.
@@ -760,7 +761,7 @@ construct_axis_grob = function(axis_param, which, data_scale, format = NULL) {
 # anno = anno_points(matrix(runif(20), nc = 2), pch = 1:2)
 # draw(anno, test = "matrix")
 anno_points = function(x, which = c("column", "row"), border = TRUE, gp = gpar(), pch = 16, 
-	size = unit(2, "mm"), ylim = NULL, extend = 0.05, axis = TRUE,
+	size = unit(2, "mm"), ylim = NULL, extend = 0.05, axis = TRUE, background = FALSE,
 	axis_param = default_axis_param(which), width = NULL, height = NULL, ...) {
 
 	other_args = list(...)
@@ -841,6 +842,11 @@ anno_points = function(x, which = c("column", "row"), border = TRUE, gp = gpar()
 		}
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
+			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
+		}
 		if(is.matrix(value)) {
 			for(i in seq_len(ncol(value))) {
 				grid.points(value[index, i], n - seq_along(index) + 1, gp = subset_gp(gp, i), 
@@ -878,6 +884,11 @@ anno_points = function(x, which = c("column", "row"), border = TRUE, gp = gpar()
 		}
 		
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
+			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
+		}
 		if(is.matrix(value)) {
 			for(i in seq_len(ncol(value))) {
 				grid.points(seq_along(index), value[index, i], gp = subset_gp(gp, i), 
@@ -920,7 +931,7 @@ anno_points = function(x, which = c("column", "row"), border = TRUE, gp = gpar()
 		height = anno_size$height,
 		n = n,
 		data_scale = data_scale,
-		var_import = list(value, gp, border, pch, size, axis, axis_param, axis_grob, data_scale, pch_as_image)
+		var_import = list(value, gp, border, pch, size, axis, axis_param, axis_grob, data_scale, pch_as_image, background)
 	)
 
 	anno@subset_rule$gp = subset_vector
@@ -981,6 +992,7 @@ update_anno_extend = function(anno, axis_grob, axis_param) {
 # -extend The extension to both side of ``ylim``. The value is a percent value corresponding to ``ylim[2] - ylim[1]``.
 # -axis Whether to add axis?
 # -axis_param parameters for controlling axis. See `default_axis_param` for all possible settings and default parameters.
+# -background Logical, whether to draw background grid lines?
 # -width Width of the annotation. The value should be an absolute unit. Width is not allowed to be set for column annotation.
 # -height Height of the annotation. The value should be an absolute unit. Height is not allowed to be set for row annotation.
 #
@@ -1000,7 +1012,7 @@ update_anno_extend = function(anno, axis_grob, axis_param) {
 # draw(anno, test = "matrix")
 anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(), 
 	add_points = smooth, smooth = FALSE, pch = 16, size = unit(2, "mm"), pt_gp = gpar(), ylim = NULL, 
-	extend = 0.05, axis = TRUE, axis_param = default_axis_param(which),
+	extend = 0.05, axis = TRUE, axis_param = default_axis_param(which), background = FALSE,
 	width = NULL, height = NULL) {
 
 	ef = function() NULL
@@ -1067,6 +1079,11 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 		}
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
+			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
+		}
 		if(is.matrix(value)) {
 			for(i in seq_len(ncol(value))) {
 				x = n - seq_along(index) + 1
@@ -1125,6 +1142,11 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 		}
 
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
+			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
+		}
 		if(is.matrix(value)) {
 			for(i in seq_len(ncol(value))) {
 				x = seq_along(index)
@@ -1190,7 +1212,7 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 		n = n,
 		data_scale = data_scale,
 		var_import = list(value, gp, border, pch, size, pt_gp, axis, axis_param, 
-			axis_grob, data_scale, add_points, smooth)
+			axis_grob, data_scale, add_points, smooth, background)
 	)
 
 	anno@subset_rule$gp = subset_vector
@@ -1234,6 +1256,7 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 # -extend The extension to both side of ``ylim``. The value is a percent value corresponding to ``ylim[2] - ylim[1]``.
 # -axis Whether to add axis?
 # -axis_param parameters for controlling axis. See `default_axis_param` for all possible settings and default parameters.
+# -background Logical, whether to draw background grid lines?
 # -add_numbers Whether to add numbers to the bars. It only works when ``x`` is a simple vector.
 # -numbers_gp Graphics parameters for the numbers.
 # -numbers_rot Rotation of numbers.
@@ -1258,7 +1281,7 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 # draw(anno, test = "proportion matrix")
 anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TRUE, bar_width = 0.6, 
 	beside = FALSE, attach = FALSE,
-	gp = gpar(fill = "#CCCCCC"), ylim = NULL, extend = 0.05, axis = TRUE, 
+	gp = gpar(fill = "#CCCCCC"), ylim = NULL, extend = 0.05, axis = TRUE, background = FALSE,
 	axis_param = default_axis_param(which), 
 	add_numbers = FALSE, numbers_gp = gpar(fontsize = 8), 
 	numbers_rot = ifelse(which == "column", 45, 0), numbers_offset = unit(2, "mm"),
@@ -1371,16 +1394,23 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 			value_origin = value
 			value = data_scale[2] - value + data_scale[1]
 			baseline = data_scale[2] - baseline + data_scale[1]
+		} else {
+			value_origin = value
 		}
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
+			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
+		}
 		if(ncol(value) == 1) {
 			width = value[index] - baseline
 			x_coor = width/2+baseline
 			grid.rect(x = x_coor, y = n - seq_along(index) + 1, width = abs(width), height = 1*bar_width, default.units = "native", gp = subset_gp(gp, index))
 			if(add_numbers) {
 				if(axis_param$direction == "normal") {
-					txt = value[index]
+					txt = value_origin[index]
 					if(!is.null(attr(value, "labels_format"))) {
 						txt = attr(value, "labels_format")(value[index])
 					}
@@ -1449,23 +1479,38 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 			value_origin = value
 			value = data_scale[2] - value + data_scale[1]
 			baseline = data_scale[2] - baseline + data_scale[1]
+		} else {
+			value_origin = value
 		}
 
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
+			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
+		}
 		if(ncol(value) == 1) {
 			height = value[index] - baseline
 			y_coor = height/2+baseline
 			grid.rect(y = y_coor, x = seq_along(index), height = abs(height), width = 1*bar_width, default.units = "native", gp = subset_gp(gp, index))
 			if(add_numbers) {
-				txt = value[index]
+				txt = value_origin[index]
 				if(!is.null(attr(value, "labels_format"))) {
 					txt = attr(value, "labels_format")(value[index])
 				}
 				numbers_rot = numbers_rot %% 360
-				if(numbers_rot == 0) {
-					grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("bottom"))
+				if(axis_param$direction == "normal") {
+					if(numbers_rot == 0) {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("bottom"))
+					} else {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("left"), rot = numbers_rot)
+					}
 				} else {
-					grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") + numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("left"), rot = numbers_rot)
+					if(numbers_rot == 0) {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") - numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("top"))
+					} else {
+						grid.text(txt, x = seq_along(index), y = unit(baseline + height, "native") - numbers_offset, default.units = "native", gp = subset_gp(numbers_gp, index), just = c("right"), rot = numbers_rot)
+					}
 				}
 			}
 		} else {
@@ -1533,7 +1578,7 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 		height = anno_size$height,
 		n = n,
 		data_scale = data_scale,
-		var_import = list(value, gp, border, bar_width, baseline, beside, attach, axis, axis_param, axis_grob, data_scale, add_numbers, numbers_gp, numbers_offset, numbers_rot)
+		var_import = list(value, gp, border, bar_width, baseline, beside, attach, axis, axis_param, axis_grob, data_scale, add_numbers, numbers_gp, numbers_offset, numbers_rot, background)
 	)
 
 	anno@subset_rule$value = subset_matrix_by_row
@@ -1567,6 +1612,7 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 # -pt_gp Graphics parameters for points.
 # -axis Whether to add axis?
 # -axis_param parameters for controlling axis. See `default_axis_param` for all possible settings and default parameters.
+# -background Logical, whether to draw background grid lines?
 # -width Width of the annotation. The value should be an absolute unit. Width is not allowed to be set for column annotation.
 # -height Height of the annotation. The value should be an absolute unit. Height is not allowed to be set for row annotation.
 # -... Other arguments.
@@ -1586,7 +1632,7 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 # draw(anno, test = "anno_boxplot with gp")
 anno_boxplot = function(x, which = c("column", "row"), border = TRUE,
 	gp = gpar(fill = "#CCCCCC"), ylim = NULL, extend = 0.05, outline = TRUE, box_width = 0.6,
-	add_points = FALSE, pch = 16, size = unit(4, "pt"), pt_gp = gpar(), axis = TRUE, 
+	add_points = FALSE, pch = 16, size = unit(4, "pt"), pt_gp = gpar(), axis = TRUE, background = FALSE,
 	axis_param = default_axis_param(which), width = NULL, height = NULL, ...) {
 
 	other_args = list(...)
@@ -1664,7 +1710,11 @@ anno_boxplot = function(x, which = c("column", "row"), border = TRUE,
 		pch = pch[index]
 		size = size[index]
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
-		
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
+			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
+		}
 		grid.rect(x = boxplot_stats[2, ], y = n - seq_along(index) + 1,  
 			height = 1*box_width, width = boxplot_stats[4, ] - boxplot_stats[2, ], just = "left", 
 			default.units = "native", gp = gp)
@@ -1727,6 +1777,11 @@ anno_boxplot = function(x, which = c("column", "row"), border = TRUE,
 		pch = pch[index]
 		size = size[index]
 		pushViewport(viewport(xscale = c(0.5, n+0.5), yscale = data_scale))
+		if(background) {
+			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
+			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
+		}
 		grid.rect(x = seq_along(index), y = boxplot_stats[2, ], 
 			height = boxplot_stats[4, ] - boxplot_stats[2, ], width = 1*box_width, just = "bottom", 
 			default.units = "native", gp = gp)
@@ -1790,7 +1845,7 @@ anno_boxplot = function(x, which = c("column", "row"), border = TRUE,
 		width = anno_size$width,
 		height = anno_size$height,
 		data_scale = data_scale,
-		var_import = list(value, gp, border, box_width, axis, axis_param, axis_grob, data_scale, add_points, pch, pt_gp, size, outline)
+		var_import = list(value, gp, border, box_width, axis, axis_param, axis_grob, data_scale, add_points, pch, pt_gp, size, outline, background)
 	)
 
 	anno@subset_rule$value = subset_vector

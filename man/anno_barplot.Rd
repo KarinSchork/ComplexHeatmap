@@ -9,7 +9,7 @@ Barplot Annotation
 \usage{
 anno_barplot(x, baseline = 0, which = c("column", "row"), border = TRUE, bar_width = 0.6,
     beside = FALSE, attach = FALSE,
-    gp = gpar(fill = "#CCCCCC"), ylim = NULL, extend = 0.05, axis = TRUE,
+    gp = gpar(fill = "#CCCCCC"), ylim = NULL, extend = 0.05, axis = TRUE, background = FALSE,
     axis_param = default_axis_param(which),
     add_numbers = FALSE, numbers_gp = gpar(fontsize = 8),
     numbers_rot = ifelse(which == "column", 45, 0), numbers_offset = unit(2, "mm"),
@@ -29,6 +29,7 @@ anno_barplot(x, baseline = 0, which = c("column", "row"), border = TRUE, bar_wid
   \item{extend}{The extension to both side of \code{ylim}. The value is a percent value corresponding to \code{ylim[2] - ylim[1]}.}
   \item{axis}{Whether to add axis?}
   \item{axis_param}{parameters for controlling axis. See \code{\link{default_axis_param}} for all possible settings and default parameters.}
+  \item{background}{Logical, whether to draw background grid lines?}
   \item{add_numbers}{Whether to add numbers to the bars. It only works when \code{x} is a simple vector.}
   \item{numbers_gp}{Graphics parameters for the numbers.}
   \item{numbers_rot}{Rotation of numbers.}
