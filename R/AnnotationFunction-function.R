@@ -728,6 +728,9 @@ construct_axis_grob = function(axis_param, which, data_scale, format = NULL) {
 	return(axis_grob)
 }
 
+
+ANNO_BACKGROUND_COL = "#DDDDDD"
+
 # == title
 # Points Annotation
 #
@@ -843,7 +846,7 @@ anno_points = function(x, which = c("column", "row"), border = TRUE, gp = gpar()
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
 			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
 		}
@@ -885,7 +888,7 @@ anno_points = function(x, which = c("column", "row"), border = TRUE, gp = gpar()
 		
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
 			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
 		}
@@ -1080,7 +1083,7 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
 			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
 		}
@@ -1143,7 +1146,7 @@ anno_lines = function(x, which = c("column", "row"), border = TRUE, gp = gpar(),
 
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
 			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
 		}
@@ -1400,7 +1403,7 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
 			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
 		}
@@ -1485,7 +1488,7 @@ anno_barplot = function(x, baseline = 0, which = c("column", "row"), border = TR
 
 		pushViewport(viewport(yscale = data_scale, xscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
 			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
 		}
@@ -1711,7 +1714,7 @@ anno_boxplot = function(x, which = c("column", "row"), border = TRUE,
 		size = size[index]
 		pushViewport(viewport(xscale = data_scale, yscale = c(0.5, n+0.5)))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), unit(1:n, "native"), gp = gpar(col = "white"))
 			grid.segments(axis_grob$children[[2]]$x0, unit(0, "npc"), axis_grob$children[[2]]$x0, unit(1, "npc"), gp = gpar(col = "white"))
 		}
@@ -1778,7 +1781,7 @@ anno_boxplot = function(x, which = c("column", "row"), border = TRUE,
 		size = size[index]
 		pushViewport(viewport(xscale = c(0.5, n+0.5), yscale = data_scale))
 		if(background) {
-			grid.rect(gp = gpar(fill = "#CCCCCC"))
+			grid.rect(gp = gpar(fill = ANNO_BACKGROUND_COL))
 			grid.segments(unit(1:n, "native"), unit(0, "npc"), unit(1:n, "native"), unit(1, "npc"), gp = gpar(col = "white"))
 			grid.segments(unit(0, "npc"), axis_grob$children[[2]]$y0, unit(1, "npc"), axis_grob$children[[2]]$y0, gp = gpar(col = "white"))
 		}
